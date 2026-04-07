@@ -297,6 +297,7 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--ivory);co
         <div class="sb-link" onclick="showPanel('clinic')"><span class="ic">🏥</span> Clinic Details</div>
         <div class="sb-link" onclick="showPanel('social')"><span class="ic">📱</span> Social Handles</div>
         <div class="sb-section">Pages &amp; Content</div>
+        <div class="sb-link" onclick="showPanel('media')"><span class="ic">&#127760;</span> Media &amp; Images</div>
         <div class="sb-link" onclick="showPanel('testimonials')"><span class="ic">⭐</span> Testimonials</div>
         <div class="sb-link" onclick="showPanel('popup')"><span class="ic">📣</span> Popup / Promo Banner</div>
         <div class="sb-section">Integrations</div>
@@ -737,15 +738,15 @@ Progress tracking</textarea></div>
             <div class="ch"><h3>&#128178; UPI Payment Config</h3></div>
             <div class="cb">
               <div class="frow">
-                <div class="form-group"><label>UPI ID</label><input id="upi-id" value="drkishan.rehabplus@ptsbi" placeholder="name@bank"></div>
-                <div class="form-group"><label>Display Name</label><input id="upi-name" value="Dr Kishan RehabPlus" placeholder="Dr Kishan RehabPlus"></div>
+                <div class="form-group"><label>UPI ID</label><input id="upi-id" value="91111818478@ptsbi" placeholder="name@bank"></div>
+                <div class="form-group"><label>Display Name</label><input id="upi-name" value="Kishan Vaishnav" placeholder="Kishan Vaishnav"></div>
               </div>
               <div class="frow">
                 <div class="form-group"><label>Session Fee (&#8377;)</label><input id="upi-session" type="number" value="800"></div>
                 <div class="form-group"><label>Home Visit Fee (&#8377;)</label><input id="upi-home" type="number" value="1200"></div>
                 <div class="form-group"><label>Online Fee (&#8377;)</label><input id="upi-online" type="number" value="600"></div>
               </div>
-              <div class="info-box" style="margin-top:.5rem;">&#128178; UPI ID: <strong>drkishan.rehabplus@ptsbi</strong> &nbsp;·&nbsp; Payments go directly to your bank via UPI. No gateway fees.</div>
+              <div class="info-box" style="margin-top:.5rem;">&#128178; UPI ID: <strong>91111818478@ptsbi</strong> &nbsp;·&nbsp; Payments go directly to your bank via UPI. No gateway fees.</div>
               <button class="btn bg" onclick="saveUPIConfig()" style="margin-top:.8rem;">&#128190; Save UPI Config</button>
             </div>
           </div>
@@ -1306,7 +1307,7 @@ service cloud.firestore {
             <div class="ch"><h3>UPI Configuration</h3></div>
             <div class="cb">
               <div class="frow">
-                <div class="form-group"><label>UPI ID</label><input id="upi-id" value="drkishan.rehabplus@ptsbi" placeholder="yourname@bank"></div>
+                <div class="form-group"><label>UPI ID</label><input id="upi-id" value="91111818478@ptsbi" placeholder="yourname@bank"></div>
                 <div class="form-group"><label>Display Name</label><input id="upi-name" value="Dr. Kishan Vaishnav - RehabPlus"></div>
               </div>
               <button class="btn bg" onclick="saveUpiConfig()">&#128176; Save UPI Config</button>
@@ -1335,6 +1336,112 @@ service cloud.firestore {
           </div>
           <div class="info-box">&#128161; UPI payments work instantly — no KYC, no fees, no setup. Patients pay via GPay / PhonePe / Paytm. After payment they send you a screenshot on WhatsApp to confirm booking.</div>
         </div>
+      </div>
+
+
+      <!-- ══════════════════════════════════════════ -->
+      <!-- MEDIA & IMAGES PANEL                      -->
+      <!-- ══════════════════════════════════════════ -->
+      <div class="panel" id="panel-media">
+        <h2 class="panel-title">&#127760; Media &amp; Images</h2>
+        <p class="panel-sub">Upload and manage images and videos shown on your website.</p>
+        <div class="pg">
+
+          <!-- HERO IMAGE -->
+          <div class="card">
+            <div class="ch"><h3>&#127968; Hero / Banner Image</h3><span style="font-size:.72rem;color:var(--muted);">Shown on homepage hero section</span></div>
+            <div class="cb">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;">
+                <div>
+                  <div class="form-group"><label>Upload Image</label><input type="file" id="media-hero-file" accept="image/*" onchange="previewMedia(this,'media-hero-preview')"></div>
+                  <div class="form-group"><label>Or paste image URL</label><input id="media-hero-url" placeholder="https://..." oninput="previewMediaUrl(this.value,'media-hero-preview')"></div>
+                  <button class="btn bg" onclick="saveMediaItem('hero_image','media-hero-url','media-hero-preview')">&#128190; Save Hero Image</button>
+                </div>
+                <div>
+                  <div style="background:#f5f5f5;border-radius:.6rem;overflow:hidden;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">
+                    <img id="media-hero-preview" src="" alt="" style="max-width:100%;max-height:100%;display:none;object-fit:cover;">
+                    <span id="media-hero-placeholder" style="font-size:.8rem;color:var(--muted);">No image uploaded</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DOCTOR IMAGE -->
+          <div class="card">
+            <div class="ch"><h3>&#128104;&#8205;&#9877;&#65039; Doctor Profile Photo</h3><span style="font-size:.72rem;color:var(--muted);">Shown on About page and homepage</span></div>
+            <div class="cb">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;">
+                <div>
+                  <div class="form-group"><label>Upload Photo</label><input type="file" id="media-doc-file" accept="image/*" onchange="previewMedia(this,'media-doc-preview')"></div>
+                  <div class="form-group"><label>Or paste image URL</label><input id="media-doc-url" placeholder="https://..." oninput="previewMediaUrl(this.value,'media-doc-preview')"></div>
+                  <button class="btn bg" onclick="saveMediaItem('doctor_image','media-doc-url','media-doc-preview')">&#128190; Save Doctor Photo</button>
+                </div>
+                <div>
+                  <div style="background:#f5f5f5;border-radius:50%;width:140px;height:140px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:2px solid var(--border);margin:0 auto;">
+                    <img id="media-doc-preview" src="" alt="" style="width:100%;height:100%;display:none;object-fit:cover;">
+                    <span style="font-size:2.5rem;">&#128104;&#8205;&#9877;&#65039;</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLINIC PHOTOS -->
+          <div class="card">
+            <div class="ch"><h3>&#127973; Clinic Gallery</h3><button class="btn bo bsm" onclick="addClinicPhoto()">+ Add Photo</button></div>
+            <div class="cb">
+              <div id="clinic-photos-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:1rem;"></div>
+              <div style="background:#f5f5f5;border-radius:.7rem;padding:1.2rem;border:1.5px dashed var(--border);">
+                <div class="frow">
+                  <div class="form-group"><label>Photo URL</label><input id="clinic-photo-url" placeholder="https://..."></div>
+                  <div class="form-group"><label>Caption</label><input id="clinic-photo-caption" placeholder="Treatment room, Reception..."></div>
+                </div>
+                <button class="btn bg" onclick="addClinicPhoto()">+ Add to Gallery</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- INTRO VIDEO -->
+          <div class="card">
+            <div class="ch"><h3>&#127909; Intro / Promo Video</h3><span style="font-size:.72rem;color:var(--muted);">YouTube or direct video link</span></div>
+            <div class="cb">
+              <div class="form-group"><label>YouTube Video URL</label><input id="media-video-url" placeholder="https://www.youtube.com/watch?v=..."></div>
+              <div class="form-group"><label>Video Title</label><input id="media-video-title" placeholder="Welcome to RehabPlus"></div>
+              <div class="form-group"><label>Thumbnail Image URL (optional)</label><input id="media-video-thumb" placeholder="https://..."></div>
+              <div id="video-preview-box" style="margin-bottom:.8rem;display:none;">
+                <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:.7rem;background:#000;">
+                  <iframe id="video-preview-frame" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen></iframe>
+                </div>
+              </div>
+              <div style="display:flex;gap:.6rem;">
+                <button class="btn bg" onclick="saveVideo()">&#128190; Save Video</button>
+                <button class="btn bo" onclick="previewVideo()">&#9654; Preview</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SERVICE ICONS -->
+          <div class="card">
+            <div class="ch"><h3>&#127757; Service Card Images</h3><span style="font-size:.72rem;color:var(--muted);">Images for each service on the Services page</span></div>
+            <div class="cb">
+              <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem;">Add a custom image URL for each service card. Leave blank to use the default emoji icon.</p>
+              <div id="service-media-list" style="display:flex;flex-direction:column;gap:.6rem;"></div>
+              <button class="btn bo bsm" onclick="renderServiceMedia()" style="margin-top:.6rem;">&#8635; Refresh</button>
+            </div>
+          </div>
+
+          <!-- ALL MEDIA LIBRARY -->
+          <div class="card">
+            <div class="ch"><h3>&#128247; Media Library</h3><button class="btn br bsm" onclick="clearAllMedia()">&#128465; Clear All</button></div>
+            <div class="cb">
+              <div id="media-library-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;"></div>
+              <p style="font-size:.75rem;color:var(--muted);margin-top:.8rem;">&#9432; Images are stored as URLs in Firebase. For best performance use compressed images under 500KB.</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="info-box">&#9432; All media is saved to Firebase and applied live to your website. Images load from their URLs — use Google Drive, Imgur, Cloudinary or any public image host.</div>
       </div>
 
 <!-- BLOG MODAL (with image upload) -->
@@ -1516,13 +1623,14 @@ function changePassword(){
 }
 
 // ══ NAV ══
-const panelTitles={dashboard:'Dashboard',calendar:'Schedule & Calendar',bookings:'Bookings & Enquiries',blogs:'Blog Posts',services:'Services Customisation',clinic:'Clinic Details',profile:'My Profile',password:'Change Password','hero':'Hero / Homepage','pricing':'Pricing & Packages','faq':'FAQ','announce':'Announcements','seo':'SEO & Meta','siteconfig':'Site Settings','fbsetup':'Firebase Setup','courses':'Courses & Webinars','testimonials':'Testimonials','popup':'Popup / Promo Banner','contactconfig':'Contact Configuration','sheets':'Google Sheets Setup','upi':'UPI Payments','social':'Social Handles','certs':'Certificates'};
+const panelTitles={dashboard:'Dashboard',calendar:'Schedule & Calendar',bookings:'Bookings & Enquiries',blogs:'Blog Posts',services:'Services Customisation',clinic:'Clinic Details',profile:'My Profile',password:'Change Password','hero':'Hero / Homepage','pricing':'Pricing & Packages','faq':'FAQ','announce':'Announcements','seo':'SEO & Meta','siteconfig':'Site Settings','fbsetup':'Firebase Setup','courses':'Courses & Webinars','testimonials':'Testimonials','popup':'Popup / Promo Banner','contactconfig':'Contact Configuration','sheets':'Google Sheets Setup','media':'Media & Images','upi':'UPI Payments','social':'Social Handles','certs':'Certificates'};
 function showPanel(id){
   if(id==='courses'){setTimeout(renderCourses,50);setTimeout(loadWebinar,50);}
   if(id==='testimonials'){setTimeout(renderTestimonials,50);}
   if(id==='popup'){setTimeout(loadPopup,50);}
   if(id==='contactconfig'){setTimeout(loadContactConfig,50);}
   if(id==='sheets'){setTimeout(loadSheetsConfig,50);}
+  if(id==='media'){setTimeout(loadMedia,50);}
   if(id==='upi'){setTimeout(loadUpiConfig,50);}
   if(id==='reviews'){setTimeout(renderReviews,50);}
   if(id==='certs'){setTimeout(renderCerts,50);}
@@ -1860,7 +1968,8 @@ function saveBlogPost(){
   const post={id:editBlogId!==null?editBlogId:Date.now(),title,cat:document.getElementById('bm-cat').value,date:document.getElementById('bm-date').value,excerpt,content:document.getElementById('bm-content').value,read:document.getElementById('bm-read').value||'3 min',status:document.getElementById('bm-status').value,author:'Dr. Kishan Vaishnav',img:document.getElementById('bm-img').value};
   if(editBlogId!==null){const idx=blogs.findIndex(b=>b.id===editBlogId);if(idx>-1)blogs[idx]=post;else blogs.push(post);}else blogs.push(post);
   DB.set('blogs',blogs);DB.set('lastUpdated',Date.now());
-  closeBlogModal();renderBlogTable();
+  closeBlogModal();
+  fbSave('rp_blogs', {items: lsg('rp_blogs') || []});renderBlogTable();
   toast(editBlogId?'✅ Post updated!':'✅ Post published!');
 }
 function deleteBlog(id){
@@ -1929,7 +2038,8 @@ function saveService(){
   const svc={id:editServiceId!==null?editServiceId:Date.now(),icon:document.getElementById('sm-icon').value||'🩺',name,desc,tag:document.getElementById('sm-tag').value,tagcolor:document.getElementById('sm-tagcolor').value,bgcolor:document.getElementById('sm-bgcolor').value,status:document.getElementById('sm-status').value};
   if(editServiceId!==null){const i=services.findIndex(s=>s.id===editServiceId);if(i>-1)services[i]=svc;else services.push(svc);}else services.push(svc);
   DB.set('services',services);DB.set('lastUpdated',Date.now());
-  closeServiceModal();renderServiceTable();
+  closeServiceModal();
+  fbSave('rp_services', {items: lsg('rp_services') || []});renderServiceTable();
   toast(editServiceId?'✅ Service updated!':'✅ Service added!');
 }
 function deleteService(id){
@@ -1972,7 +2082,7 @@ function loadClinic(){
 }
 function saveClinic(){
   DB.set('clinic',{name:document.getElementById('cl-name').value,phone:document.getElementById('cl-phone').value,email:document.getElementById('cl-email').value,address:document.getElementById('cl-address').value,whatsapp:document.getElementById('cl-whatsapp').value,maps:document.getElementById('cl-maps').value,hours:document.getElementById('cl-hours').value,onlineHours:document.getElementById('cl-online-hours').value,closed:document.getElementById('cl-closed').value});
-  DB.set('lastUpdated',Date.now());toast('✅ Clinic details saved!');
+  DB.set('lastUpdated',Date.now());toast('✅ Saved — live on website! Clinic details saved!');
 }
 
 // ══ PROFILE ══
@@ -1989,7 +2099,7 @@ function loadProfile(){
 }
 function saveProfile(){
   DB.set('profile',{name:document.getElementById('pr-name').value,role:document.getElementById('pr-role').value,bio:document.getElementById('pr-bio').value,qual:document.getElementById('pr-qual').value,exp:document.getElementById('pr-exp').value,patients:document.getElementById('pr-patients').value,phone:document.getElementById('pr-phone').value,specs:document.getElementById('pr-specs').value});
-  DB.set('lastUpdated',Date.now());toast('✅ Profile saved!');
+  DB.set('lastUpdated',Date.now());toast('✅ Saved — live on website! Profile saved!');
 }
 
 // ══ TOAST ══
@@ -2141,15 +2251,18 @@ function deleteSocial(id){
 // ══════════════════════════════════════
 function saveHero(){
   var data={h1:v('hr-h1'),h2:v('hr-h2'),desc:v('hr-desc'),badge:v('hr-badge')};
-  ls('rp_hero',data); toast('✅ Hero text saved!');
+  ls('rp_hero',data);
+  fbSave('rp_hero', data); toast('✅ Saved — live on website! Hero text saved!');
 }
 function saveStats(){
   var data={v1:v('st-v1'),l1:v('st-l1'),v2:v('st-v2'),l2:v('st-l2'),v3:v('st-v3'),l3:v('st-l3')};
-  ls('rp_stats',data); toast('✅ Stats saved!');
+  ls('rp_stats',data);
+  fbSave('rp_stats', data); toast('✅ Saved — live on website! Stats saved!');
 }
 function savePills(){
   var data=[v('pi-1'),v('pi-2'),v('pi-3')].filter(Boolean);
-  ls('rp_pills',data); toast('✅ Mode pills saved!');
+  ls('rp_pills',data);
+  fbSave('rp_pills', data); toast('✅ Saved — live on website! Mode pills saved!');
 }
 function loadHero(){
   try{
@@ -2169,7 +2282,8 @@ function savePricing(){
            dur:r.querySelector('.pk-dur').value,features:r.querySelector('.pk-features').value};
   });
   ls('rp_pricing',{fees:fees,packages:pkgs});
-  toast('✅ Pricing saved!');
+  fbSave('rp_pricing', lsg('rp_pricing'));
+  toast('✅ Saved — live on website! Pricing saved!');
 }
 function addPkgRow(){
   var id=Date.now();
@@ -2189,7 +2303,8 @@ function addFaq(){
   ls('rp_faq',faqs);
   document.getElementById('fq-q').value='';
   document.getElementById('fq-a').value='';
-  renderFaq(); toast('✅ FAQ added!');
+  renderFaq();
+  fbSave('rp_faq', {items: lsg('rp_faq') || []}); toast('✅ FAQ added!');
 }
 function renderFaq(){
   var faqs=lsg('rp_faq')||[];
@@ -2224,7 +2339,8 @@ function addAnnounce(){
   var items=lsg('rp_announce')||[];items.push(item);
   ls('rp_announce',items);
   document.getElementById('an-msg').value='';
-  renderAnnounce(); toast('📢 Announcement published!');
+  renderAnnounce();
+  fbSave('rp_announce', {items: lsg('rp_announce') || []}); toast('📢 Announcement published!');
 }
 function renderAnnounce(){
   var items=lsg('rp_announce')||[];
@@ -2257,7 +2373,8 @@ function deleteAnnounce(id){
 // ══════════════════════════════════════
 function saveSeo(){
   var pages={home:{title:v('seo-home-title'),desc:v('seo-home-desc')},svc:{title:v('seo-svc-title'),desc:v('seo-svc-desc')},doc:{title:v('seo-doc-title'),desc:v('seo-doc-desc')}};
-  ls('rp_seo',pages); toast('✅ SEO data saved!');
+  ls('rp_seo',pages);
+  fbSave('rp_seo', pages); toast('✅ Saved — live on website! SEO data saved!');
 }
 function exportSeoMeta(){
   var pages=lsg('rp_seo')||{};
@@ -2285,7 +2402,8 @@ function exportSeoMeta(){
 // ══════════════════════════════════════
 function saveSiteConfig(){
   var cfg={wa:document.getElementById('cfg-wa').checked,fab:document.getElementById('cfg-fab').checked,marquee:document.getElementById('cfg-marquee').checked,reviews:document.getElementById('cfg-reviews').checked,booking:document.getElementById('cfg-booking').checked};
-  ls('rp_config',cfg); toast('⚙️ Settings saved!');
+  ls('rp_config',cfg);
+  fbSave('rp_config', cfg); toast('⚙️ Settings saved!');
 }
 function saveContactConfig(){
   var cfg=lsg('rp_config')||{};
@@ -2300,7 +2418,8 @@ function previewColor(el){
 }
 function saveColors(){
   var colors={primary:document.getElementById('cfg-color1').value,accent:document.getElementById('cfg-color2').value,bg:document.getElementById('cfg-color3').value};
-  ls('rp_colors',colors); toast('✅ Theme colours saved! Refresh a page to see changes.');
+  ls('rp_colors',colors);
+  fbSave('rp_colors', colors); toast('✅ Saved — live on website! Theme colours saved! Refresh a page to see changes.');
 }
 function resetColors(){
   document.getElementById('cfg-color1').value='#1B3A2D';
@@ -2498,6 +2617,7 @@ function addCourse(){
     var el=document.getElementById(id);if(el)el.value='';
   });
   renderCourses();
+  fbSave('rp_courses', {items: lsg('rp_courses') || []});
   toast('✅ Course added — visible on PhysioPro page!');
 }
 
@@ -2553,7 +2673,8 @@ function saveWebinar(){
     sub:document.getElementById('wb-sub').value.trim()
   };
   ls('rp_webinar',wb);
-  toast('✅ Webinar strip saved!');
+  fbSave('rp_webinar', wb);
+  toast('✅ Saved — live on website! Webinar strip saved!');
 }
 
 function loadWebinar(){
@@ -2586,6 +2707,7 @@ function addTestimonial(){
   ls('rp_testimonials',items);
   ['ts-name','ts-service','ts-text','ts-avatar'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   renderTestimonials();
+  fbSave('rp_testimonials', {items: lsg('rp_testimonials') || []});
   toast('✅ Testimonial added!');
 }
 
@@ -2641,7 +2763,8 @@ function savePopup(){
     delay:parseInt(document.getElementById('pp-delay').value)||3
   };
   ls('rp_popup',data);
-  toast('✅ Popup settings saved!');
+  fbSave('rp_popup', data);
+  toast('✅ Saved — live on website! Popup settings saved!');
   updatePopupPreview();
 }
 
@@ -2686,7 +2809,8 @@ function saveContactConfig2(){
     emergency:document.getElementById('cc-emergency').value.trim()
   };
   ls('rp_contact',d);
-  toast('✅ Contact details saved — reflected on all pages via site-data.js!');
+  fbSave('rp_contact', d);
+  toast('✅ Saved — live on website! Contact details saved — reflected on all pages via site-data.js!');
 }
 
 function loadContactConfig(){
@@ -2702,7 +2826,8 @@ function saveWATemplates(){
     enquiry:document.getElementById('cc-wa-enquiry').value.trim()
   };
   ls('rp_wa_templates',d);
-  toast('✅ WhatsApp templates saved!');
+  fbSave('rp_wa_templates', d);
+  toast('✅ Saved — live on website! WhatsApp templates saved!');
 }
 
 // ══════════════════════════════════════════════════════
@@ -2787,6 +2912,7 @@ function saveSheetsConfig(){
     logReviews: document.getElementById('sh-log-reviews').checked
   };
   ls('rp_sheets', cfg);
+  fbSave('rp_sheets', cfg);
   toast(url ? '✅ Google Sheets config saved!' : '⚠️ URL empty — not connected.');
   checkSheetsStatus();
 }
@@ -2941,6 +3067,231 @@ function saveUPIConfig(){
   };
   ls('rp_upi',cfg);
   toast('✅ UPI config saved! Update your website files to reflect new amounts.');
+}
+
+// ══════════════════════════════════════════════════════
+// MEDIA & IMAGES
+// ══════════════════════════════════════════════════════
+function loadMedia() {
+  var media = lsg('rp_media') || {};
+  // Hero image
+  if (media.hero_image) {
+    document.getElementById('media-hero-url').value = media.hero_image;
+    previewMediaUrl(media.hero_image, 'media-hero-preview');
+  }
+  // Doctor image
+  if (media.doctor_image) {
+    document.getElementById('media-doc-url').value = media.doctor_image;
+    previewMediaUrl(media.doctor_image, 'media-doc-preview');
+  }
+  // Video
+  if (media.video_url) {
+    document.getElementById('media-video-url').value = media.video_url || '';
+    document.getElementById('media-video-title').value = media.video_title || '';
+    document.getElementById('media-video-thumb').value = media.video_thumb || '';
+  }
+  renderClinicPhotos();
+  renderServiceMedia();
+  renderMediaLibrary();
+}
+
+function previewMedia(input, previewId) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = document.getElementById(previewId);
+    var ph  = document.getElementById(previewId.replace('preview','placeholder'));
+    if (img) { img.src = e.target.result; img.style.display = 'block'; }
+    if (ph)  ph.style.display = 'none';
+    // Set URL field to data URL
+    var urlId = previewId.replace('preview','url');
+    var urlEl = document.getElementById(urlId);
+    if (urlEl) urlEl.value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewMediaUrl(url, previewId) {
+  if (!url) return;
+  var img = document.getElementById(previewId);
+  var ph  = document.getElementById(previewId.replace('preview','placeholder'));
+  if (img) { img.src = url; img.style.display = 'block'; img.onerror = function(){img.style.display='none'; if(ph)ph.style.display='block';}; }
+  if (ph && url) ph.style.display = 'none';
+}
+
+function saveMediaItem(key, urlInputId, previewId) {
+  var url = document.getElementById(urlInputId).value.trim();
+  if (!url) { toast('⚠️ Please enter or upload an image first.'); return; }
+  var media = lsg('rp_media') || {};
+  media[key] = url;
+  ls('rp_media', media);
+  fbSave('rp_media', media);
+  toast('✅ ' + key.replace('_',' ') + ' saved — live on website!');
+  renderMediaLibrary();
+}
+
+function addClinicPhoto() {
+  var url     = document.getElementById('clinic-photo-url').value.trim();
+  var caption = document.getElementById('clinic-photo-caption').value.trim();
+  if (!url) { toast('⚠️ Please enter a photo URL.'); return; }
+  var media   = lsg('rp_media') || {};
+  var photos  = media.clinic_photos || [];
+  photos.push({ url: url, caption: caption, id: Date.now() });
+  media.clinic_photos = photos;
+  ls('rp_media', media);
+  fbSave('rp_media', media);
+  document.getElementById('clinic-photo-url').value = '';
+  document.getElementById('clinic-photo-caption').value = '';
+  renderClinicPhotos();
+  toast('✅ Clinic photo added!');
+}
+
+function renderClinicPhotos() {
+  var media  = lsg('rp_media') || {};
+  var photos = media.clinic_photos || [];
+  var grid   = document.getElementById('clinic-photos-grid');
+  if (!grid) return;
+  if (!photos.length) {
+    grid.innerHTML = '<p style="font-size:.78rem;color:var(--muted);grid-column:1/-1;">No clinic photos yet.</p>';
+    return;
+  }
+  var rows = '';
+  photos.forEach(function(p) {
+    rows += '<div style="position:relative;border-radius:.5rem;overflow:hidden;aspect-ratio:4/3;background:#f5f5f5;">';
+    rows += '<img src="' + p.url + '" style="width:100%;height:100%;object-fit:cover;">';
+    rows += '<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);color:#fff;font-size:.65rem;padding:.25rem .4rem;">' + esc(p.caption||'') + '</div>';
+    rows += '<button onclick="deleteClinicPhoto(' + p.id + ')" style="position:absolute;top:.3rem;right:.3rem;background:rgba(231,76,60,.85);border:none;color:#fff;border-radius:50%;width:20px;height:20px;cursor:pointer;">x</button>';
+    rows += '</div>';
+  });
+  grid.innerHTML = rows;
+}
+
+function deleteClinicPhoto(id) {
+  var media  = lsg('rp_media') || {};
+  media.clinic_photos = (media.clinic_photos||[]).filter(function(p){return p.id!==id;});
+  ls('rp_media',media);
+  fbSave('rp_media',media);
+  renderClinicPhotos();
+  toast('&#128465;&#65039; Photo removed.');
+}
+
+function previewVideo() {
+  var url = document.getElementById('media-video-url').value.trim();
+  if (!url) { toast('⚠️ Enter a YouTube URL first.'); return; }
+  var videoId = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  var box = document.getElementById('video-preview-box');
+  var frame = document.getElementById('video-preview-frame');
+  if (videoId && box && frame) {
+    frame.src = 'https://www.youtube.com/embed/' + videoId[1];
+    box.style.display = 'block';
+  } else {
+    toast('⚠️ Could not parse YouTube URL. Use format: https://www.youtube.com/watch?v=...');
+  }
+}
+
+function saveVideo() {
+  var url   = document.getElementById('media-video-url').value.trim();
+  var title = document.getElementById('media-video-title').value.trim();
+  var thumb = document.getElementById('media-video-thumb').value.trim();
+  if (!url) { toast('⚠️ Please enter a video URL.'); return; }
+  var media = lsg('rp_media') || {};
+  media.video_url   = url;
+  media.video_title = title;
+  media.video_thumb = thumb;
+  ls('rp_media', media);
+  fbSave('rp_media', media);
+  toast('✅ Video saved — live on website!');
+}
+
+function renderServiceMedia() {
+  var services = lsg('rp_services') || [];
+  var media    = lsg('rp_media') || {};
+  var svcMedia = media.service_images || {};
+  var el = document.getElementById('service-media-list');
+  if (!el) return;
+  var defaultServices = ['Sports Physiotherapy','Orthopaedic Rehab','Cupping and Dry Needling','Spinal Manipulation','TMJ Dysfunction','Chronic Pain Management'];
+  var list = services.length ? services.map(function(s){return s.name;}) : defaultServices;
+  el.innerHTML = '';
+  list.forEach(function(name) {
+    var key = name.replace(/[^a-z0-9]/gi,'_').toLowerCase();
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:.8rem;padding:.6rem;background:#f9f9f9;border-radius:.5rem;margin-bottom:.4rem;';
+    var thumb = document.createElement('div');
+    thumb.style.cssText = 'width:48px;height:48px;border-radius:.4rem;background:#e8e8e8;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;';
+    if (svcMedia[key]) {
+      var img = document.createElement('img');
+      img.src = svcMedia[key];
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+      thumb.appendChild(img);
+    } else {
+      thumb.textContent = '💉';
+    }
+    var info = document.createElement('div');
+    info.style.flex = '1';
+    var label = document.createElement('div');
+    label.style.cssText = 'font-size:.8rem;font-weight:600;color:#111;margin-bottom:.25rem;';
+    label.textContent = name;
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'https://image-url...';
+    input.value = svcMedia[key] || '';
+    input.style.cssText = 'font-size:.72rem;padding:.25rem .5rem;border:1px solid #ddd;border-radius:.4rem;width:100%;';
+    (function(k){ input.addEventListener('change', function(){ saveServiceImage(k, this.value); }); })(key);
+    info.appendChild(label);
+    info.appendChild(input);
+    row.appendChild(thumb);
+    row.appendChild(info);
+    el.appendChild(row);
+  });
+}
+
+// Event delegation for dynamically created service image inputs
+document.addEventListener('change', function(e) {
+  if (e.target && e.target.classList.contains('svc-img-input')) {
+    var key = e.target.getAttribute('data-svckey');
+    if (key) saveServiceImage(key, e.target.value);
+  }
+});
+
+function saveServiceImage(key, url) {
+  var media = lsg('rp_media') || {};
+  if (!media.service_images) media.service_images = {};
+  media.service_images[key] = url;
+  ls('rp_media', media);
+  fbSave('rp_media', media);
+  toast('✅ Service image saved!');
+  renderServiceMedia();
+}
+
+function renderMediaLibrary() {
+  var media = lsg('rp_media') || {};
+  var grid  = document.getElementById('media-library-grid');
+  if (!grid) return;
+  var items = [];
+  if (media.hero_image)   items.push({url:media.hero_image,   label:'Hero'});
+  if (media.doctor_image) items.push({url:media.doctor_image, label:'Doctor'});
+  (media.clinic_photos||[]).forEach(function(p){items.push({url:p.url,label:p.caption||'Clinic'});});
+  if (!items.length) {
+    grid.innerHTML = '<p style="font-size:.78rem;color:var(--muted);grid-column:1/-1;">No media uploaded yet.</p>';
+    return;
+  }
+  var rows = '';
+  items.forEach(function(item) {
+    rows += '<div style="aspect-ratio:1;border-radius:.5rem;overflow:hidden;background:#f5f5f5;position:relative;">';
+    rows += '<img src="' + item.url + '" style="width:100%;height:100%;object-fit:cover;">';
+    rows += '<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);color:#fff;font-size:.6rem;padding:.2rem .3rem;text-align:center;">' + esc(item.label) + '</div>';
+    rows += '</div>';
+  });
+  grid.innerHTML = rows;
+}
+
+function clearAllMedia() {
+  if (!confirm('Clear all media? This cannot be undone.')) return;
+  ls('rp_media', {});
+  fbSave('rp_media', {});
+  loadMedia();
+  toast('&#128465;&#65039; All media cleared.');
 }
 </script>
 
