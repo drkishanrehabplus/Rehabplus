@@ -49,6 +49,10 @@ function _loadAll() {
       _applyContact(d.contact);
       _applyTestimonials(d.testimonials);
       _applyPopup(d.popup);
+      _applyBlogs(d.blogs);
+      _applyFaq(d.faq);
+      _applyPricing(d.pricing);
+      _applyMedia(d.media);
     })
     .catch(e => { console.warn("Firestore load:", e.message); _applyFallback(); });
 }
@@ -202,6 +206,88 @@ function _applyFallback() {
     const contact = JSON.parse(localStorage.getItem("rp_contact")||"null");
     if (contact) _applyContact(contact);
   } catch(e) {}
+}
+
+
+function _applyBlogs(d) {
+  if (!d || !Array.isArray(d.items)) return;
+  // Update blog grids dynamically
+  const grid = document.getElementById('blog-list') || document.querySelector('.blog-grid');
+  if (!grid) return;
+  const active = d.items.filter(b => b.status !== 'draft');
+  if (!active.length) return;
+  grid.innerHTML = active.slice(0,6).map(b => `
+    <article class="blog-card">
+      <div class="blog-thumb" style="background:#f2f2f2;height:160px;display:flex;align-items:center;justify-content:center;font-size:2rem;">${b.emoji||'📝'}</div>
+      <div class="blog-body" style="padding:1rem;">
+        <div style="font-size:.65rem;color:#888;margin-bottom:.3rem;">${b.date||''} · ${b.category||''}</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:#111;margin-bottom:.3rem;">${b.title||''}</h3>
+        <p style="font-size:.78rem;color:#666;line-height:1.6;">${(b.excerpt||'').substring(0,100)}...</p>
+      </div>
+    </article>`).join('');
+}
+
+function _applyFaq(d) {
+  if (!d || !Array.isArray(d.items)) return;
+  const container = document.getElementById('faq-list') || document.querySelector('.faq-list');
+  if (!container) return;
+  container.innerHTML = d.items.filter(f => f.active !== false).map(f => `
+    <div class="faq-item" style="border:1px solid rgba(0,0,0,.08);border-radius:.7rem;margin-bottom:.6rem;overflow:hidden;">
+      <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:1rem 1.2rem;cursor:pointer;font-weight:600;font-size:.88rem;color:#111;display:flex;justify-content:space-between;align-items:center;">${f.q} <span>+</span></div>
+      <div style="display:none;padding:.8rem 1.2rem;font-size:.82rem;color:#666;line-height:1.7;border-top:1px solid rgba(0,0,0,.06);">${f.a}</div>
+    </div>`).join('');
+}
+
+function _applyPricing(d) {
+  if (!d || !Array.isArray(d.rows)) return;
+  const grid = document.querySelector('.packages-grid') || document.querySelector('.pricing-grid');
+  if (!grid) return;
+  grid.innerHTML = d.rows.map((p,i) => `
+    <div class="pkg-card${i===1?' featured':''}">
+      ${i===1?'<div class="pkg-badge">Most Popular</div>':''}
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#111;">${p.name||''}</h3>
+      <div class="pkg-price">&#8377;${p.price||''}<span>/session</span></div>
+      <a href="booking.html" class="btn btn-green btn-sm btn-full" style="margin-top:.8rem;">Book Now</a>
+    </div>`).join('');
+}
+
+
+function _applyMedia(d) {
+  if (!d) return;
+  // Hero image
+  if (d.hero_image) {
+    var heroRight = document.querySelector('.hero-right img') || document.querySelector('.hero-img');
+    if (heroRight) heroRight.src = d.hero_image;
+  }
+  // Doctor image
+  if (d.doctor_image) {
+    document.querySelectorAll('.doc-avatar img, .doctor-photo, .doc-img').forEach(function(img) {
+      img.src = d.doctor_image; img.style.display = 'block';
+    });
+  }
+  // Video embed
+  if (d.video_url) {
+    var videoId = d.video_url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    if (videoId) {
+      var frames = document.querySelectorAll('.video-frame, #intro-video');
+      frames.forEach(function(f) {
+        f.src = 'https://www.youtube.com/embed/' + videoId[1];
+        f.style.display = 'block';
+      });
+    }
+  }
+  // Service images
+  if (d.service_images) {
+    document.querySelectorAll('.s-card').forEach(function(card) {
+      var name = card.querySelector('h3');
+      if (!name) return;
+      var key = name.textContent.trim().replace(/\s+/g,'_').toLowerCase();
+      if (d.service_images[key]) {
+        var icon = card.querySelector('.s-icon');
+        if (icon) icon.innerHTML = '<img src="'+d.service_images[key]+'" style="width:100%;height:100%;object-fit:cover;border-radius:.5rem;">';
+      }
+    });
+  }
 }
 
 // ── Boot ──────────────────────────────────────────────────────
