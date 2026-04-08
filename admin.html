@@ -1308,7 +1308,7 @@ service cloud.firestore {
             <div class="cb">
               <div class="frow">
                 <div class="form-group"><label>UPI ID</label><input id="upi-id" value="91111818478@ptsbi" placeholder="yourname@bank"></div>
-                <div class="form-group"><label>Display Name</label><input id="upi-name" value="Dr. Kishan Vaishnav - RehabPlus"></div>
+                <div class="form-group"><label>Display Name</label><input id="upi-name" value="Kishan Vaishnav"></div>
               </div>
               <button class="btn bg" onclick="saveUpiConfig()">&#128176; Save UPI Config</button>
             </div>
@@ -3016,58 +3016,107 @@ document.addEventListener('DOMContentLoaded', function(){
 
 // ══ UPI PAYMENTS ══
 function loadUpiConfig(){
-  var cfg=lsg('rp_upi')||{};
-  if(cfg.id)sv('upi-id',cfg.id);
-  if(cfg.name)sv('upi-name',cfg.name);
-  var prices=lsg('rp_upi_prices')||{};
-  if(prices.p1)sv('upi-p1',prices.p1);
-  if(prices.p2)sv('upi-p2',prices.p2);
-  if(prices.p3)sv('upi-p3',prices.p3);
-  if(prices.p4)sv('upi-p4',prices.p4);
-  if(prices.p5)sv('upi-p5',prices.p5);
+  var cfg = lsg('rp_upi') || {};
+  sv('upi-id',   cfg.id   || '91111818478@ptsbi');
+  sv('upi-name', cfg.name || 'Kishan Vaishnav');
+  var prices = lsg('rp_upi_prices') || {};
+  // Also try from cfg.prices (new format)
+  if(cfg.prices){
+    sv('upi-p1', cfg.prices.clinic    || prices.p1 || '800');
+    sv('upi-p2', cfg.prices.online    || prices.p2 || '600');
+    sv('upi-p3', cfg.prices.home      || prices.p3 || '1200');
+    sv('upi-p4', cfg.prices.physiopro || prices.p4 || '2499');
+  } else {
+    sv('upi-p1', prices.p1 || '800');
+    sv('upi-p2', prices.p2 || '600');
+    sv('upi-p3', prices.p3 || '1200');
+    sv('upi-p4', prices.p4 || '2499');
+  }
+  sv('upi-p5', (lsg('rp_upi_prices')||{}).p5 || '1000');
+  // Auto-generate links
+  setTimeout(generateUpiLinks, 100);
 }
 function saveUpiConfig(){
-  ls('rp_upi',{id:v('upi-id'),name:v('upi-name')});
-  toast('✅ UPI config saved!');
+  var cfg={id:v('upi-id'),name:v('upi-name')};
+  ls('rp_upi',cfg);
+  fbSave('rp_upi',cfg);
+  generateUpiLinks();
+  toast('✅ UPI config saved — payment links updated!');
 }
 function saveUpiPrices(){
   ls('rp_upi_prices',{p1:v('upi-p1'),p2:v('upi-p2'),p3:v('upi-p3'),p4:v('upi-p4'),p5:v('upi-p5')});
-  toast('✅ Prices saved!');
+  fbSave('rp_upi_prices',lsg('rp_upi_prices'));
+  generateUpiLinks();
+  toast('✅ Prices saved — payment links updated!');
 }
-function generateUpiLinks(){
-  var id=v('upi-id');
-  var name=encodeURIComponent(v('upi-name')||'RehabPlus');
-  var prices=lsg('rp_upi_prices')||{p1:800,p2:600,p3:1200,p4:2499,p5:1000};
-  var services=[
-    ['In-Clinic Session',prices.p1||800,'InClinic Session'],
-    ['Online Consultation',prices.p2||600,'Online Consultation'],
-    ['Home Visit',prices.p3||1200,'Home Visit'],
-    ['PhysioPro Monthly',prices.p4||2499,'PhysioPro Monthly'],
-    ['First Assessment',prices.p5||1000,'First Assessment']
-  ];
-  var out=document.getElementById('upi-links-output');
-  if(!id){toast('⚠️ Enter UPI ID first.');return;}
-  out.innerHTML=services.map(function(s){
-    var link='upi://pay?pa='+id+'&pn='+name+'&am='+s[1]+'&cu=INR&tn='+encodeURIComponent(s[2]+' - RehabPlus');
-    return '<div style="display:flex;align-items:center;gap:.7rem;padding:.5rem .7rem;background:var(--ivory);border-radius:.5rem;border:1px solid var(--border);">'+
-      '<div style="flex:1;"><strong style="font-size:.82rem;">'+s[0]+'</strong><span style="color:var(--muted);margin-left:.5rem;">&#8377;'+s[1]+'</span></div>'+
-      '<button class="btn bo bsm" onclick="navigator.clipboard.writeText(\''+link+'\').then(function(){toast(\'📋 Link copied!\');})">&#128203; Copy</button>'+
-      '<a href="'+link+'" class="btn bg bsm">&#128176; Test</a></div>';
-  }).join('');
+function copyUpiLink(btn){
+  var link=btn.getAttribute('data-link');
+  if(link&&navigator.clipboard){
+    navigator.clipboard.writeText(link).then(function(){toast('Copied!');});
+  } else if(link) {
+    var ta=document.createElement('textarea');
+    ta.value=link;document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
+    toast('Copied!');
+  }
 }
 
-// ── UPI Config ──
-function saveUPIConfig(){
-  var cfg={
-    id:document.getElementById('upi-id').value.trim(),
-    name:document.getElementById('upi-name').value.trim(),
-    session:document.getElementById('upi-session').value,
-    home:document.getElementById('upi-home').value,
-    online:document.getElementById('upi-online').value
-  };
-  ls('rp_upi',cfg);
-  toast('✅ UPI config saved! Update your website files to reflect new amounts.');
+function generateUpiLinks(){
+  var id   = v('upi-id').trim();
+  var name = encodeURIComponent(v('upi-name').trim() || 'Kishan Vaishnav');
+  if(!id){ toast('Enter UPI ID first.'); return; }
+  var p1 = v('upi-p1')||'800';
+  var p2 = v('upi-p2')||'600';
+  var p3 = v('upi-p3')||'1200';
+  var p4 = v('upi-p4')||'2499';
+  var services = [
+    ['In-Clinic Session',   p1, 'InClinic-RehabPlus'],
+    ['Online Consultation', p2, 'Online-RehabPlus'],
+    ['Home Visit',          p3, 'HomeVisit-RehabPlus'],
+    ['PhysioPro Monthly',   p4, 'PhysioPro-RehabPlus']
+  ];
+  var out = document.getElementById('upi-links-output');
+  if(!out) return;
+  out.innerHTML = '';
+  services.forEach(function(s){
+    var link = 'upi://pay?pa='+encodeURIComponent(id)+'&pn='+name+'&am='+s[1]+'&cu=INR&tn='+encodeURIComponent(s[2]);
+    var row = document.createElement('div');
+    row.style.cssText = 'background:#f5f5f5;border-radius:.5rem;padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;';
+    var info = document.createElement('div');
+    var title = document.createElement('div');
+    title.style.cssText = 'font-size:.8rem;font-weight:700;color:#111;';
+    title.textContent = s[0] + ' — ₹' + s[1];
+    var linkEl = document.createElement('div');
+    linkEl.style.cssText = 'font-size:.65rem;color:#888;margin-top:.1rem;word-break:break-all;';
+    linkEl.textContent = link;
+    info.appendChild(title);
+    info.appendChild(linkEl);
+    var btnGroup = document.createElement('div');
+    btnGroup.style.cssText = 'display:flex;gap:.4rem;flex-shrink:0;';
+    var copyBtn = document.createElement('button');
+    copyBtn.className = 'btn bo bsm';
+    copyBtn.textContent = 'Copy';
+    copyBtn.setAttribute('data-link', link);
+    copyBtn.onclick = function(){ copyUpiLink(this); };
+    var testBtn = document.createElement('a');
+    testBtn.className = 'btn bg bsm';
+    testBtn.href = link;
+    testBtn.textContent = 'Test';
+    testBtn.target = '_blank';
+    btnGroup.appendChild(copyBtn);
+    btnGroup.appendChild(testBtn);
+    row.appendChild(info);
+    row.appendChild(btnGroup);
+    out.appendChild(row);
+  });
+  // Save to Firebase
+  var upiData = {id:id, name:decodeURIComponent(name), prices:{clinic:p1,online:p2,home:p3,physiopro:p4}};
+  ls('rp_upi', upiData);
+  fbSave('rp_upi', upiData);
+  toast('UPI links generated and saved!');
 }
+
+
 
 // ══════════════════════════════════════════════════════
 // MEDIA & IMAGES
