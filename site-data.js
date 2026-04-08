@@ -53,6 +53,7 @@ function _loadAll() {
       _applyFaq(d.faq);
       _applyPricing(d.pricing);
       _applyMedia(d.media);
+      _applyUpi(d.upi);
     })
     .catch(e => { console.warn("Firestore load:", e.message); _applyFallback(); });
 }
@@ -252,6 +253,29 @@ function _applyPricing(d) {
 }
 
 
+
+function _applyUpi(d) {
+  if (!d || !d.id) return;
+  var id   = encodeURIComponent(d.id);
+  var name = encodeURIComponent(d.name || 'Kishan Vaishnav');
+  var prices = d.prices || {};
+  var planMap = {
+    '600':  prices.online    || '600',
+    '800':  prices.clinic    || '800',
+    '1200': prices.home      || '1200',
+    '2499': prices.physiopro || '2499',
+  };
+  document.querySelectorAll('[href^="upi://pay"]').forEach(function(el) {
+    var amMatch = el.href.match(/[&?]am=([0-9]+)/);
+    var oldAmt = amMatch ? amMatch[1] : null;
+    var newAmt = planMap[oldAmt] || oldAmt;
+    if (newAmt) {
+      var tn = el.href.match(/[&?]tn=([^&]+)/);
+      var note = tn ? tn[1] : 'RehabPlus';
+      el.href = 'upi://pay?pa=' + id + '&pn=' + name + '&am=' + newAmt + '&cu=INR&tn=' + note;
+    }
+  });
+}
 function _applyMedia(d) {
   if (!d) return;
   // Hero image
